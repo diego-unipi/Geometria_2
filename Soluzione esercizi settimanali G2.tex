@@ -1,0 +1,337 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{amsmath,amssymb,amsthm,pict2e}
+\usepackage[a4paper, a4paper,
+bindingoffset=0.2in,
+left=1in,
+right=1in,
+top=1in,
+bottom=1in,
+footskip=.25in]{geometry}
+\usepackage{mathrsfs}
+\usepackage{textcomp}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{hyphenat}
+\usepackage{faktor}
+\usepackage{xcolor}
+\usepackage{soul}
+\usepackage{tabularx}
+\usepackage[new]{old-arrows}
+\usepackage{tikz-cd}
+\usepackage{booktabs}
+\usepackage[shortlabels]{enumitem}
+\newtheorem{theorem}{Teorema}
+\newtheorem{corollary}{Corollario}[theorem]
+\newtheorem{proposition}{Proposizione}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{remark}
+\newtheorem*{remark}{Osservazione}
+\newtheorem*{example}{Esempio}
+\theoremstyle{definition}
+\newtheorem{definition}{Definizione}[section]
+\newenvironment{solution}{\renewcommand{\proofname}{Soluzione}\begin{proof}}{\end{proof}}
+\makeatletter
+\newcommand{\trianglelefteqslant}{\mathrel{\mathpalette\al@tlles\relax}}
+\newcommand{\al@tlles}[2]{%
+  \sbox\z@{$#1\m@th\leqslant$}%
+  \setlength{\unitlength}{\wd\z@}% \leqslant is essentially square
+  \raisebox{-\dp\z@}{%
+    \begin{picture}(1,1)
+    \roundcap\roundjoin
+    \polygon(0.875,1)(0.125,0.625)(0.875,0.275)
+    \polyline(0.125,0.375)(0.875,0.025)
+    \end{picture}%
+  }%
+}
+\makeatother
+
+\tikzcdset{scale cd/.style={every label/.append style={scale=#1},
+    cells={nodes={scale=#1}}}}
+
+\ExplSyntaxOn
+\NewDocumentCommand{\cycle}{ O{\;} m }
+ {
+  (
+  \alec_cycle:nn { #1 } { #2 }
+  )
+ }
+
+\seq_new:N \l_alec_cycle_seq
+\cs_new_protected:Npn \alec_cycle:nn #1 #2
+ {
+  \seq_set_split:Nnn \l_alec_cycle_seq { , } { #2 }
+  \seq_use:Nn \l_alec_cycle_seq { #1 }
+ }
+\ExplSyntaxOff
+
+\makeatletter
+\def\moverlay{\mathpalette\mov@rlay}
+\def\mov@rlay#1#2{\leavevmode\vtop{%
+   \baselineskip\z@skip \lineskiplimit-\maxdimen
+   \ialign{\hfil$\m@th#1##$\hfil\cr#2\crcr}}}
+\newcommand{\charfusion}[3][\mathord]{
+    #1{\ifx#1\mathop\vphantom{#2}\fi
+        \mathpalette\mov@rlay{#2\cr#3}
+      }
+    \ifx#1\mathop\expandafter\displaylimits\fi}
+\makeatother
+
+\newcommand{\cupdot}{\charfusion[\mathbin]{\cup}{\cdot}}
+\newcommand{\bigcupdot}{\charfusion[\mathop]{\bigcup}{\cdot}}
+
+
+\newcommand{\ve}{\underline}
+\newcommand{\pdiv}{\mid\!\mid}
+\DeclareMathOperator{\St}{St}
+\newcommand{\Cl}{\mathcal{C}\ell}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\Z}[1]{\mathbb{Z}/{#1}\mathbb{Z}}
+\newcommand{\F}[1]{\mathbb{F}_{#1}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\HH}{\mathbb{H}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\sF}{\mathcal{F}}
+\newcommand{\FF}{\mathbb{F}}
+\newcommand{\ps}{\mathcal{P}}
+\newcommand{\KK}{\mathbb{K}}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\Sym}{\mathcal{S}}
+\DeclareMathOperator{\Span}{Span}
+\DeclareMathOperator{\Imm}{Im}
+\DeclareMathOperator{\rg}{rg}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\id}{Id}
+\DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\Aff}{Aff}
+\DeclareMathOperator{\Alt}{Alt}
+\DeclareMathOperator{\Stab}{Stab}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Symm}{Sym}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Bil}{Bil}
+\DeclareMathOperator{\Mult}{Mult}
+\DeclareMathOperator{\Ann}{Ann}
+\DeclareMathOperator{\Iso}{Iso}
+\DeclareMathOperator{\Rad}{Rad}
+\DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\cof}{cof}
+\DeclareMathOperator{\spec}{sp}
+\DeclareMathOperator{\CI}{CI}
+\newcommand{\m}{\, \middle| \,}
+\setlist[enumerate]{itemsep=-1mm}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+\title{\large{\textbf{Corso di Laurea in Matematica \\
+Geometria 2 - Esercizi settimanali A.A. 2023/24}}}
+\date{\textsc{Esercizi I settimana}}
+\author{Diego Monaco}
+\maketitle
+
+\noindent \textbf{Esercizio 1.}
+\vspace{-2mm}
+\begin{enumerate}[(1)]
+    \item Si calcoli la cardinalità di $\PP^n(\FF_q)$, dove $\FF_q$ denota un campo finito con $q$ elementi.
+    \item Siano $r_0,r_1,r_2$ tre rette non concorrenti (cioè tali che $r_0 \cap r_1 \cap r_2 = \emptyset$) in un piano proiettivo $\PP(V)$ (quindi $\dim \PP(V) = 2$) su un campo $\KK$.
+    Si mostri che esiste:
+    \[ P \in \PP(V)\setminus(r_0 \cup r_1 \cup r_2)
+        \]
+\end{enumerate}
+
+\begin{solution}
+  Vediamo i due punti:
+  \begin{enumerate}[(1)]
+    \item Dalla definizione data di spazio proiettivo abbiamo che:
+    \[ \#\PP^n(\FF_q) = \#\PP(\FF_q^{n+1})= \#\left(\frac{\FF_q^{n+1}\setminus\{0\}}{\sim}\right)
+      \]
+    Osserviamo che le classi di equivalenza di $\sim$ hanno la stessa cardinalità, data da $q-1$. Infatti $v \sim w \iff v = \lambda w$, $\lambda\in \FF_q^*$, ovvero, fissato un rappresentante, le classi di equivalenza si ottengono tutte moltiplicando per gli scalari invertibili di $\FF_q$, che sono $q-1$,
+    pertanto tutte le classi di equivalenza di $\sim$ hanno questa cardinalità e da sopra si ottiene:
+    \[ \#\PP^n(\FF_q) = \frac{q^{n+1} - 1}{q - 1}
+      \]
+    \item Chiamiamo: $P_0 = r_0 \cap r_1, P_1 = r_1 \cap r_2, P_2 = r_2 \cap r_0$ (tali intersezioni esistono poiché stiamo considerando coppie di rette in un piano proiettivo, che per quanto visto a lezione si intersecano necessariamente in un punto), e siano $[v_0] = P_0, [v_1] = P_1, [v_2] = P_2$, con $v_0,v_1,v_2 \in V$, le classi associate ai punti. Osserviamo che, essendo le rette non concorrenti, i punti $P_0,P_1,P_2$ sono necessariamente distinti,
+    e per come definiti non allineati (quindi i vettori associati non stanno sullo stesso piano, pertanto sono indipendenti (essendo in uno spazio di dimensione 3))
+    per cui dei rappresentanti a loro associati sono linearmente indipendenti.
+    Consideriamo:
+    \[ v_0 + v_1 + v_2 \in V \qquad \text{con} \qquad P := [v_0 + v_1 + v_2] \in \PP(V)
+      \]
+    e verifichiamo che $P$ è il punto di $\PP(V)$ richiesto dalla traccia. Se fosse $P \in r_0 = L(P_0,P_2)$, avremmo:
+    \[ [v_0 + v_1 + v_2] \in L(P_0,P_2) \iff v_0 + v_1 + v_2 \in \Span(v_0,v_2)
+      \]
+    e dalle proprietà di sottospazio vettoriale di $\Span(v_0,v_2)$ seguirebbe che $v_1 \in \Span(v_0,v_2)$, ma questo è assurdo poiché $v_1$ è linearmente indipendente con $v_0,v_2$, pertanto $P \not \in r_0$. Ragionando in maniera analoga nel caso di $r_1$ ed $r_2$ si ottiene che $P \in \PP(V)\setminus(r_0 \cup r_1 \cup r_2)$, come richiesto.\\
+    Osserviamo che tale soluzione vale sia nel caso in cui $\KK$ sia un campo infinito, sia nel caso finito, tuttavia, in quest'ultimo caso si può fare direttamente il conto usando il punto (1) e ricordando che una retta proiettiva corrisponde ad un $\PP^1(V)$ come segue:
+    \[ \#\PP(V) - \#(r_0 \cup r_1 \cup r_2) = \frac{q^{3} - 1}{q - 1} - \#(r_0 \cup r_1 \cup r_2)
+      \]
+    dove $\#(r_0 \cup r_1 \cup r_2)$ si ottiene usando il principio di inclusione-esclusione, con $\#r_i = \#\PP^1(\KK) = \frac{q^2-1}{q-1} = q+1$, $\# r_i \ne r_j = 1$ (dall'ipotesi) e $\# r_1 \cap r_2 \cap r_3 = 0$ (sempre per ipotesi), e quindi:
+    \[ \begin{split}
+      \#\PP(V) - \#(r_0 \cup r_1 \cup r_2) & = q^2 + q + 1 - 3q \\
+                                           & = q^2 - 2q + 1
+    \end{split}
+      \]
+    che è maggiore di 0 se e solo se $q \ne 1$ (che è sempre vero per un campo finito).
+    \end{enumerate}
+\end{solution}
+
+\noindent \textbf{Esercizio 2.} Siano $W_1,W_2,W_3$ piani $\PP^4(\KK)$ tali $W_i \cap W_j$ è un punto per ogni $i \ne j$ e che $W_1 \cap W_2 \cap W_3 = \emptyset$. Si mostri che esiste un unico piano $W_0 \subseteq \PP^4(\KK)$ tale che per 
+$i = 1,2,3$ l'insieme $W_0 \cap W_i$ sia una retta proiettiva.
+
+\begin{solution}
+  Siano $P_1 = W_1 \cap W_2$, $P_2 = W_2 \cap W_3$, $P_3 = W_3 \cap W_1$ (sono distinti perché per ipotesi i tre piani non si intersecano contemporaneamente) e sia $W_0 = L(P_1,P_2,P_3)$. Si osserva che $\dim W_0 = 2$, infatti essendo i tre punti distinti e non allineati (altrimenti i piani coinciderebbero), detti $v_1,v_2,v_3 \in V$
+  dei rappresentanti si ha che sono linearmente indipendenti e:
+  \[ L(P_1,P_2,P_3) = \pi(\Span(v_1,v_2,v_3))
+    \] 
+  dove, dalla lineare indipendenza segue che $\dim(\Span(v_1,v_2,v_3)) = 3$ e nel proiettivo $\dim(L(P_1,P_2,P_3)) = 2 \implies W_0$ è un piano.\\
+  Verifichiamo che è quello richiesto dalla tesi. Consideriamo $W_0 \cap W_1$, poiché $P_1,P_2 \in W_1$ e $W_0 = L(P_1,P_2,P_3)$, allora:
+  \[ P_1,P_2 \in W_0 \cap W_1 \implies L(P_1,P_2) \subseteq W_0 \cap W_1
+    \]
+  e come segue da quanto osservato prima $\dim(L(P_1,P_2)) = 1$ (= è una retta proiettiva), inoltre $\dim(W_0 \cap W_1) \leq 1$, perché se fosse 2 i piani coinciderebbero, ma questo è assurdo perché $P_2 \not \in W_1$, pertanto $W_0 \cap W_1 = L(P_1,P_2)$. Ragionando analogamente si verifica che $W_0$ è il piano richiesto dalla traccia.\\
+  Per l'unicità, sia $W_0'$ un piano che soddisfa le ipotesi del problema, allora interseca $W_i$ nella retta $r_i'$, per $i = 1,2,3$. Sia $P_1' = \underbrace{r_1 '}_{ = W_0' \cap W_1} \cap \underbrace{r_2 '}_{= W_0 \cap W_2} \implies P_1' \in W_1 \cap W_2 \overset{\text{ipotesi}}{\implies} P_1' = P_1$, e analogamente $P_2' = P_2, P_3' = P_3$, da ciò segue $L(P_1,P_2,P_3) \subseteq W_0'$, ma allora per dimensione $W_0' = W_0$.
+\end{solution}
+
+\noindent \textbf{Esercizio 3.} Siano $r_1,r_2,r_3$ rette di $\PP^4(\KK)$ a due a due sghembe e non tutte contenute in un iperpiano (cioè un sottospazio $3$-dimensionale di $\PP^4(\KK)$). Si dimostri che esiste un'unica retta 
+che interseca sia $r_1$, sia $r_2$, sia $r_3$.
+
+\begin{solution}
+  Siano $S_1 = L(r_1,r_2), S_2 = L(r_2,r_3), S_3 = L(r_3,r_1)$, essendo le rette sghembe segue che:
+  \[ \dim(S_i) = \dim r_i + \dim r_j - \dim (r_i \cap r_j) = 1 + 1 - (-1) = 3
+    \]
+  da cui segue che:
+  \[ \dim(S_i \cap S_j) = \underbrace{\dim S_i}_{= 3} + \underbrace{\dim S_j}_{= 3} - \dim(L(S_i,S_j)) \qquad i \ne j
+    \]
+  con $\dim(L(S_i,S_j)) \leq \dim \PP^4(\KK) = 4$, inoltre, per definizione $L(S_i,S_j)$ è il più piccolo sottospazio che contiene 3 rette (sghembe), che quindi non stanno tutte in un iperpiano e quindi $\dim(L(S_i,S_j)) \geq 4$ (cioè per ipotesi il più piccolo sottospazio che contiene le tre rette è proprio $P^4(\KK)$), pertanto $\dim(L(S_i,S_j)) = 4 \implies \dim(S_i \cap S_j) = 2$.\\
+  Consideriamo quindi $S_1 \cap S_2 \cap S_3 =: r$ (cioè l'intersezione tra i più piccoli sottospazi che contengono $r_1,r_2,r_3$) e osserviamo che:
+  \[ \dim r = \underbrace{\dim(S_1)}_{= 3} + \underbrace{\dim(S_2 \cap S_3)}_{= 2} - \underbrace{\dim(L(S_1,L(S_2,S_3)))}_{\leq 4} \geq 1
+    \] 
+  inoltre $\dim r \leq 3$ (perché intersezione di sottospazi di dimensione 3), e in particolare non può essere 3 (altrimenti $S_1 = S_2 = S_3$, che è contro l'ipotesi perché staremmo dicendo che le tre rette sono contenute in un iperpiano) e analogamente non può essere 2 (altrimenti avremmo $S_i \cap S_j \subseteq S_k$, ma questo implicherebbe ancora l'avere le tre rette in uno stesso iperpiano), pertanto $\dim r = 1$, ed è proprio una retta proiettiva.\\
+  Abbiamo che $r$ è una retta cercata, infatti:
+  \[ r \subseteq S_1 \cap S_2 = L(r_1,r_2) \cap L(r_2,r_3) (\supseteq r_2)
+    \]
+  avendo dimostrato che la dimensione di $S_1 \cap S_2$ è 2, e ricordando che due rette si intersecano sempre su un piano proiettivo, abbiamo che $r \cap r_2 \ne \emptyset$, e analogamente per le altre due rette.\\
+  Per l'unicità, data $r'$ che soddisfa le ipotesi del problema, ci basta verificare che $r' \subseteq S_1 \cap S_2 \cap S_3 = r$ (e poi si conclude per dimensione). Osserviamo che:
+  \[ \dim(L(r',r_1)) = 2 - 0 = 2
+    \]
+  e idem per $\dim(L(r',r_i)) = S_i'$, da questo segue che:
+  \[ \dim(L(S_1',S_2')) = \dim(L(L(r',r_1),L(r',r_2))) = 2 + 2 - \dim(S_1' \cap S_2')
+    \]
+  con $\dim(S_1' \cap S_2') \leq 2$ (perché intersezione di sottospazi di dimensione 2) e $\dim(S_1' \cap S_2') \geq 1$ (perché c'è almeno $r'$ nell'intersezione), in particolare la dimensione non può essere 2 perché altrimenti $S_1'=S_2' \implies r_1 = r_2$, si conclude quindi che $\dim(L(S_1',S_2')) = 3$. Osservando che:
+  \[ S_1 = L(r_1,r_2)\subseteq L(L(r',r_1),L(r',r_2)) = L(S_1',S_2')
+    \]
+  dunque per dimensione $S_1 = L(S_1',S_2') \supseteq r'$, e ragionando analogamente per $S_2$ ed $S_3$ si ottiene $r' \subseteq S_1 \cap S_2 \cap S_3$.
+\end{solution}
+
+\noindent \textbf{Esercizio 4.} Sia $f : \PP^1(\KK) \longrightarrow \PP^1(\KK)$ una proiettività diversa dall'identità. Si mostri che $f^2 = \id$ se e solo se esistono punti distinti $P,Q \in \PP^1(\KK)$ tali che 
+$f(P) = Q$ e $f(Q) = P$.
+
+\begin{solution}
+  Verifichiamo le due implicazioni separatamente:
+  \begin{itemize}
+    \item[$\boxed{\Longrightarrow}$] Se $f \ne \id$, allora $\exists P \in \PP^1(\KK)$ tale che $f(P) = Q$, con $Q \ne P$, e usando l'ipotesi si ottiene:
+    \[ f^2(P) = P = f(Q)
+      \]
+    e quindi abbiamo trovato i due punti richiesti dalla tesi.
+    \item[$\boxed{\Longleftarrow}$] Siano $[v] = P$ e $[w] = Q$, con $v,w \in \KK^2$ (essendo i punti distinti per ipotesi i vettori associati sono distinti e linearmente indipendenti) e sia $\varphi$ l'applicazione lineare associata a $f$, l'ipotesi equivale a:
+    \[ \begin{split}
+      f(P) = Q, f(Q) = P &\iff [\varphi(v)] = [w], [\varphi(w)] = [v]\\
+                         &\iff \varphi(v) = \lambda w, \varphi(w) = \mu v \qquad \lambda,\mu \in \KK^*
+    \end{split}
+      \]
+    da cui, usando $B = \{v,w\}$ come base di $\KK^2$, si ottiene:
+    \[ M_B(\varphi) = \begin{pmatrix}
+      0 & \mu \\
+      \lambda &  0
+    \end{pmatrix} \implies (M_B(\varphi))^2 = \lambda \mu \begin{pmatrix}
+      1 & 0 \\
+      0 & 1
+    \end{pmatrix}
+      \]
+    che equivale a $\varphi^2 = \lambda \mu \id$ e passando al proiettivo si ottiene che $[\varphi^2] = [\id]$ ovvero la mappa proiettiva $f^2$ (indotta da $\varphi^2$) è uguale 
+    all'identità proiettiva $\id$, indotta dall'identità su $\KK^2$, pertanto $f^2 = \id$.
+  \end{itemize}
+  Alternativa per $\boxed{\Longleftarrow}$: Prendiamo $R \in \PP^1( \KK)$ distinto da $P$ e $Q$ (esiste sempre indipendentemente da $\KK$), allora $(P,Q,R)$ è un riferimento proiettivo di $\PP^1(\KK)$.
+  Nelle coordinate omogenee indotte:
+  \[ P = [0,1] \qquad Q = [0,1] \qquad R = [1,1] \, \footnote{$R$ è il punto unità del riferimento, e la scelta della base normalizzata è coerente con quella del punto unità (abbiamo visto a lezione che esiste sempre una proiettività che porta il riferimento $\mathscr{R}$ in quello standard, quindi possiamo sempre prendere la base normalizzata associata a quest'ultimo, ovvero quella canonica, da cui le coordinate omogenee scelte).}
+    \]
+  Se $f = [\varphi]$, con $\varphi \in \End(\KK^2)$, allora in queste coordinate, dalle ipotesi, bisogna avere:
+  \[ \varphi\begin{pmatrix} 1 \\ 0\end{pmatrix} = \lambda \begin{pmatrix} 0 \\ 1\end{pmatrix} \qquad \lambda \in \KK^*
+    \]\[ \varphi\begin{pmatrix} 0 \\ 1\end{pmatrix} = \mu \begin{pmatrix} 1 \\ 0\end{pmatrix} \qquad \mu \in \KK^*
+      \]
+  a questo punto:
+  \[ \varphi^2\begin{pmatrix} 1 \\ 0\end{pmatrix} = \lambda\mu \begin{pmatrix} 1 \\ 0\end{pmatrix} \qquad \text e \qquad \varphi^2\begin{pmatrix} 0 \\ 1\end{pmatrix} = \lambda\mu \begin{pmatrix} 0 \\ 1\end{pmatrix}
+    \]
+  quindi (avendo definito $\varphi^2$ su una base di $\KK^2$) si ha $\varphi^2 = \lambda \mu \id \implies f^2 = [\varphi^2] = [\lambda\mu \id] = [\id] \implies f^2 = \id$.
+\end{solution}
+
+\textit{Soluzione alternativa.} Dall'ipotesi sappiamo che $f^2(P) = P$ e $f^2(Q) = Q$ (e sappiamo che $P \ne Q$), se riuscissimo a trovare $R \in \PP^1(\KK)$, $R \ne P,Q$, con $f^2(R) = R$, allora potremmo concludere usando il teorema fondamentale delle trasformazioni proiettive con il riferimento proiettivo dato da 
+$(P,Q,R)$, infatti in questo caso sapremmo che $f^2$ è uguale alla trasformazione proiettiva che fissa i tre punti (cioè l'identità). \\In particolare, basterebbe trovare $R \in \PP^1(\KK)$ tale che $f(R) = R$, perché poi (per l'iniettività di $f$) sarebbe distinto da $P$ e $Q$ e avremmo chiaramente $f^2(R) = R$.\\
+Non possiamo dire che esiste un punto fisso per $f$ perché non sappiamo nulla su $\KK$, possiamo tuttavia passare ad una sua chiusura algebrica $\KK \subseteq \overline{\KK}$. Si ha quindi che $\PP^1(\KK) \subseteq \PP^1(\overline{\KK})$ e che una proiettività di $\PP^1(\KK)$ si estende naturalmente ad una proiettività di $\PP^1(\overline{\KK})$ (è data da una matrice in $\M(2,\KK)$).
+In $\PP^1(\overline{\KK})$ possiamo trovare l'$R$ che mancava e segue che l'estensione di $f$ a $\PP^1(\overline{\KK})$ è un'involuzione (cioè $f = f^{-1}$). 
+Possiamo quindi dire che $f(R) = R$ e che $f^2 = \id$.
+
+\hfill $\square$
+
+
+\begin{center}
+  \date{\large\textsc{Esercizi II settimana}}
+\end{center}
+
+\noindent \textbf{Esercizio 5.} Siano $P_1,P_2,P_3$ punti di $\PP^2(\KK)$ in posizione generale, e sia $r \subseteq \PP^2(\KK)$ una retta tale che $P_i \not \in R$ per $i = 1,2,3$.
+\vspace{-2mm}
+\begin{enumerate}[(1)]
+  \item Si mostri che esiste un'unica proiettività $f : \PP^2(\KK) \longrightarrow \PP^2(\KK)$ tale che $f(P_1) = P_1$, $f(P_2) = P_3$, $f(P_3) = P_2$ e $f(r) = r$.
+  \item Si mostri che l'insieme dei punti fissi di $f$ è dato dall'unione di un punto $M \in r$ ed una retta $s$ con $M \not \in S$.
+\end{enumerate}
+
+\noindent \textbf{Esercizio 6.} Si considerino i punti di $\PP^2(\RR)$ dati da:
+\[ P_1 = [1,0,0], \quad P_2 = [0,1,0], \quad P_3 = [0,0,1], \quad P_4 = [1,1,1]
+  \]\[ Q_1 = [1,-1,-1], \quad Q_2 = [1,3,1], \quad Q_3 = [1,1,-1], \quad Q_4 = [1,1,1]
+    \]
+\vspace{-2mm}
+\begin{enumerate}[(1)]
+  \item Si determini una formula esplicita per la proiettività $f : \PP^2(\RR) \longrightarrow \PP^2(\RR)$ tale che $f(P_i) = Q_i$, per $i = 1,2,3,4$.
+  \item Si determinino tutte le rette $r \subseteq \PP^2(\RR)$ tali che $f(r) = r$.
+\end{enumerate}
+
+\begin{solution}
+  Vediamo i due punti:
+  \begin{enumerate}[(1)]
+    \item Essendo $\mathscr{R} = (P_1,P_2,P_3,P_4)$ e $\mathscr{R}' = (Q_1,Q_2,Q_3,Q_4)$ due riferimenti proiettivi di $\PP^2(\RR)$ il teorema fondamentale delle trasformazioni proiettivi ci assicura l'esistenza di una proiettività $f$ che realizza quanto richiesto dalla tesi. Per trovare una 
+    una formula esplicita della proiettività ci basta trovarne una per l'applicazione lineare associata $[\varphi] = f$, facendo attenzione a prendere una base normalizzata in partenza e arrivo. Per la definizione del proiettivo abbiamo che $P_1 = [\lambda_1(1,0,0)], P_2 = [\lambda_2(0,1,0)], P_3 = [\lambda_3(0,0,1)], P_4 = [\lambda(1,1,1)]$, con $\lambda_1,\lambda_2,\lambda_3,\lambda \in \RR^*$,
+    per trovare la $\varphi$ giusta dobbiamo usare come basi in partenza e arrivo quelle ottenute da una scelta dei rappresentanti sopra normalizzate, e per fare ciò vogliamo che:
+    \[ \varphi(\lambda_ie_i) = \lambda_i \varphi(e_i) \qquad i = 1,2,3
+      \]
+    e:
+    \[ \varphi(\lambda(e_1+e_2+e_3)) = \lambda \varphi(e_1) + \lambda \varphi(e_2) + \lambda \varphi(e_3) 
+      \]
+    ora possiamo supporre per semplicità che $\lambda = 1$ e risolvere il sistema:
+    \[ \begin{pmatrix} 1 \\ 1 \\ 1 \end{pmatrix} = \lambda_1 \begin{pmatrix} 1 \\ -1 \\ - 1\end{pmatrix} + \lambda_2 \begin{pmatrix} 1 \\ 3 \\ 1 \end{pmatrix} + \lambda_3 \begin{pmatrix} 1 \\ 1 \\ - 1\end{pmatrix}
+      \]
+    da cui si ottiene che $\lambda_1,\lambda_2 = 1$ e $\lambda_3 = -1$ (in questo modo abbiamo determinato i rappresentanti vettoriali di $P_1,P_2,P_3,Q_1,Q_2,Q_3$ per avere due basi normalizzate). Per il teorema di struttura delle applicazioni lineari abbiamo quindi che usando come basi:
+    \[ B = \{(1,0,0),(0,1,0),(0,0,-1)\} \quad \text e \quad B' = \{(1,-1,-1),(1,3,1),(-1,-1,1)\}
+      \]
+    si ottiene:
+    \[ M_{B'}^{B}(\varphi) = \begin{pmatrix} 1 & 1 & -1 \\ -1 & 3 & -1 \\ -1 & 1 & 1\end{pmatrix}
+      \]
+    da cui si ricava la formula per $f$ in coordinate omogenee:
+    \[ f : \PP^2(\RR) \longrightarrow \PP^2(\RR) : [a,b,c] \longmapsto [a+b-c,-a+3b-c,-a+b+c]
+      \]
+    \item
+  \end{enumerate}
+\end{solution}
+
+
+
+
+
+
+
+
+
+
+\end{document}
